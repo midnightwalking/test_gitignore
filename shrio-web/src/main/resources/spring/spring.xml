@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"></property>
+        <property name="loginUrl" value="login.html"></property>
+        <property name="unauthorizedUrl" value="403.html"></property>
+        <property name="filterChainDefinitions">
+            <value>
+                /login.html = anon
+                /subLogin = anon
+                /* = authc
+            </value>
+        </property>
+    </bean>
+
+
+    <!-- 创建DefaultWebSecurityManager对象 -->
+    <bean class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" id="securityManager">
+        <property name="realm" ref="realm"></property>
+    </bean>
+
+    <bean class="myrealm.CustomRealm" id="realm">
+        <!--<property name="credentialsMatcher" ref="credentialsMatcher"></property>-->
+    </bean>
+
+    <!--<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher" id="credentialsMatcher">-->
+        <!--<property name="hashAlgorithmName" value="md5"></property>-->
+        <!--<property name="hashIterations" value="1"></property>-->
+    <!--</bean>-->
+</beans>
