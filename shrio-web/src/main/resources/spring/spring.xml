@@ -2,9 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util
+	   http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
     <import resource="spring-dao.xml"></import>
+    <import resource="spring-redis.xml"></import>
     <context:component-scan base-package="com.qiuzhi"></context:component-scan>
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -15,11 +18,23 @@
             <value>
                 /login.html = anon
                 /subLogin = anon
+                <!--/testRole = roles["admin"]-->
+                <!--/testRole1 = roles["admin","admin1"]-->
+                /testRole = roles["admin","admin1"]
+                /testRole1 = rolesOr["admin","admin1"]
+                /testPerms = perms["user:delete"]
+                /testPerms1 = perms["user:delete","user:update"]
                 /* = authc
             </value>
         </property>
+        <property name="filters">
+            <util:map>
+                <entry key="rolesOr" value-ref="rolesOrFilter"></entry>
+            </util:map>
+        </property>
     </bean>
 
+    <bean class="com.qiuzhi.filter.RolesOrFilter" id="rolesOrFilter"></bean>
 
     <!-- 创建DefaultWebSecurityManager对象 -->
     <bean class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" id="securityManager">
