@@ -1,6 +1,8 @@
 package com.qiuzhi.cache;
 
 import com.qiuzhi.utils.JedisUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,8 @@ import java.util.Collection;
 import java.util.Set;
 @Component
 public class RedisCache<K,V> implements Cache<K,V> {
+
+    private final static Log logger = LogFactory.getLog(RedisCache.class);
 
     @Resource
     private JedisUtil jedisUtil;
@@ -28,7 +32,7 @@ public class RedisCache<K,V> implements Cache<K,V> {
 
     @Override
     public V get(K k) throws CacheException {
-        System.out.println("从redis中获取权限数据");
+        logger.info("从redis中获取权限数据");
         byte[] value = jedisUtil.get(getKey(k));
         if(value != null){
             return (V) SerializationUtils.deserialize(value);

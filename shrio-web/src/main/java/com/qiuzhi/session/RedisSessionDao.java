@@ -1,6 +1,8 @@
 package com.qiuzhi.session;
 
 import com.qiuzhi.utils.JedisUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
@@ -18,7 +20,7 @@ import java.util.Set;
  * @description
  */
 public class RedisSessionDao extends AbstractSessionDAO {
-
+    private final static Log logger = LogFactory.getLog(RedisSessionDao.class);
     @Resource
     private JedisUtil jedisUtil;
 
@@ -47,7 +49,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
-        System.out.println("read session");
+       logger.info("read session");
         if(sessionId == null){
             return null;
         }

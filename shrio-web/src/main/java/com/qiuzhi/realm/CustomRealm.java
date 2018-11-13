@@ -2,6 +2,8 @@ package com.qiuzhi.realm;
 
 import com.qiuzhi.dao.UserDao;
 import com.vo.User;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -15,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 public class CustomRealm extends AuthorizingRealm {
-
+    private final static Log logger = LogFactory.getLog(CustomRealm.class);
     @Resource
     private UserDao userDao;
     
@@ -73,7 +75,7 @@ public class CustomRealm extends AuthorizingRealm {
     private String getUserPassword(String userName){
         User user = userDao.getUserPassword(userName);
         if(user != null){
-            System.out.println("password:" + user.getPassword());
+            logger.info("password:" + user.getPassword());
             return user.getPassword();
         }
         return null;
@@ -86,10 +88,10 @@ public class CustomRealm extends AuthorizingRealm {
      * @return
      */
     private Set<String> getRolesByUserName(String userName){
-        System.out.println("从数据库中获取授权数据");
+        logger.info("从数据库中获取授权数据");
         List<String> list = userDao.getRolesByUserName(userName);
         Set<String > set = new HashSet<>(list);
-        System.out.println("roles:" + set);
+        logger.info("roles:" + set);
         return set;
     }
 
@@ -104,7 +106,7 @@ public class CustomRealm extends AuthorizingRealm {
 
         List<String> list = userDao.getPermissionbyUserName(userName);
         Set<String > set = new HashSet<String>(list);
-        System.out.println("PermissionList:" + set);
+        logger.info("PermissionList:" + set);
         return set;
     }
 }

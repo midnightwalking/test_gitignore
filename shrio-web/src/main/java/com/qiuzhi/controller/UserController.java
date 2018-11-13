@@ -1,10 +1,11 @@
 package com.qiuzhi.controller;
 
 import com.vo.User;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +15,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class UserController {
 
+    private final static Log logger = LogFactory.getLog(UserController.class);
+
     @RequestMapping(value = "subLogin", method = RequestMethod.POST,
     produces = "application/json;charset=utf-8")
     @ResponseBody
     public String subLogin(User user){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
-
+        logger.info("用户：" + user.getUsername() + "尝试登录！");
         try{
-            token.setRememberMe(user.getRememberMe());
+//            token.setRememberMe(user.getRememberMe());
             subject.login(token);
         }catch (Exception e){
             return e.getMessage();
