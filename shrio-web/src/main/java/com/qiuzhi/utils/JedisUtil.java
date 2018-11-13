@@ -17,7 +17,7 @@ import java.util.Set;
 @Component
 public class JedisUtil {
 
-    @Autowired
+    @Resource(name = "jedisPool")
     private JedisPool jedisPool;
 
     private Jedis getResource(){

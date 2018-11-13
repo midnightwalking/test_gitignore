@@ -1,8 +1,19 @@
 package com.vo;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 public class User {
     private String username;
     private String password;
+    private boolean rememberMe;
+
+    public Boolean getRememberMe() {
+        return rememberMe;
+    }
+
+    public void setRememberMe(Boolean rememberMe) {
+        this.rememberMe = rememberMe;
+    }
 
     public String getUsername() {
         return username;
