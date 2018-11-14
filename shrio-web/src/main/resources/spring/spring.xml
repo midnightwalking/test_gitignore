@@ -12,7 +12,7 @@
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"></property>
-        <property name="loginUrl" value="login.html"></property>
+        <property name="loginUrl" value="/login.html"></property>
         <property name="unauthorizedUrl" value="403.html"></property>
         <property name="filterChainDefinitions">
             <value>
@@ -25,6 +25,7 @@
                 /testPerms = perms["user:delete"]
                 /testPerms1 = perms["user:delete","user:update"]
                 /* = authc
+                /html/*.html = authc
             </value>
         </property>
         <property name="filters">

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome!</title>
     <link href="lib/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <script src="lib/jquery/jquery-3.3.1.min.js" type="text/javascript"></script>
@@ -19,7 +20,7 @@
             height: 100%;
             width: 100%;
             position: fixed;
-            background-image: url("/img/bride_of_death_by_wlop-dbhg4hl.jpg");
+            background-image: url("/shrio-web/img/bride_of_death_by_wlop-dbhg4hl.jpg");
             background-repeat:no-repeat;
             background-size:100% 100%;
             -moz-background-size:100% 100%;
@@ -49,8 +50,8 @@
     <div class="wrap" >
         <div class="loginDiv">
             <h1>Welcome!</h1>
-
-            <form class="form-horizontal" role="form"  action="subLogin" method="post" style="margin-top: 40px;">
+            <!--action="subLogin" method="post"-->
+            <form class="form-horizontal" role="form" style="margin-top: 40px;" onsubmit="return false;">
                 <div class="form-group">
                     <label for="username" class="col-sm-4 control-label">用户名</label>
                     <div class="col-sm-2">
@@ -67,7 +68,7 @@
                 </div>
                 <div class="form-group">
                     <div style="margin-left: 46%;margin-top: 20px;">
-                        <button type="submit" class="btn btn-default">登录</button>
+                        <button id="loginSubmit" class="btn btn-default">登录</button>
                     </div>
                 </div>
             </form>
@@ -79,5 +80,26 @@
             <!--</form>-->
         </div>
     </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#loginSubmit").on('click',function(){
+                $.ajax({
+                    type: "POST",
+                    url: "/shrio-web/subLogin",
+                    data: {
+                        username: $("#username").val(),
+                        password: $("#password").val()
+                    },
+                    async: true,
+                    dataType: "text",
+                    success: function(result) {
+                        alert(result);
+                    }
+                });
+            });
+
+        });
+    </script>
 </body>
 </html>

@@ -102,8 +102,6 @@ public class CustomRealm extends AuthorizingRealm {
      * @return
      */
     private Set<String> getPermissionbyUserName(String userName){
-
-
         List<String> list = userDao.getPermissionbyUserName(userName);
         Set<String > set = new HashSet<String>(list);
         logger.info("PermissionList:" + set);

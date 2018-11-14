@@ -4,6 +4,8 @@ import com.vo.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -28,6 +30,12 @@ public class UserController {
 //            token.setRememberMe(user.getRememberMe());
             subject.login(token);
         }catch (Exception e){
+            if(e instanceof UnknownAccountException){
+                return "用户名不存在";
+            }else if(e instanceof IncorrectCredentialsException){
+                return "密码错误";
+            }
+
             return e.getMessage();
         }
 
