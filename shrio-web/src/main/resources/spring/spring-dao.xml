@@ -4,12 +4,27 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">
-        <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8"></property>
-        <property name="username" value="root"></property>
-        <property name="password" value=""></property>
+        <property name="url" value="${dataSource.url}"></property>
+        <property name="username" value="${dataSource.username}"></property>
+        <property name="password" value="${dataSource.password}"></property>
     </bean>
 
     <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
         <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+
+    <!-- mybatis文件配置,mapper.xml文件扫描 -->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:/spring/mybatisConfig.xml"/>
+        <property name="mapperLocations" value="classpath:/spring/sqlmap/*Mapper.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <!-- mapper注解扫描器配置,扫描@MapperScan注解,自动生成代码对象 -->
+    <bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.qiuzhi.dao.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
     </bean>
 </beans>

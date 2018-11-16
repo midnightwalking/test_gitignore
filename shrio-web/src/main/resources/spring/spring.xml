@@ -6,6 +6,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util
 	   http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
+
+    <!-- 引入配置文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/spring/env/datasource.properties</value>
+                <value>classpath:/spring/env/redis.properties</value>
+            </list>
+        </property>
+    </bean>
+
+
     <import resource="spring-dao.xml"></import>
     <import resource="spring-redis.xml"></import>
     <context:component-scan base-package="com.qiuzhi"></context:component-scan>

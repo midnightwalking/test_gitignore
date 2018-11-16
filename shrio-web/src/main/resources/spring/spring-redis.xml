@@ -6,8 +6,8 @@
 
     <bean class="redis.clients.jedis.JedisPool" id="jedisPool">
         <constructor-arg ref="jedisPoolConfig"></constructor-arg>
-        <constructor-arg value="localhost" type="java.lang.String"></constructor-arg>
-        <constructor-arg value="6379" type="int"></constructor-arg>
+        <constructor-arg value="${redis.hostName}" type="java.lang.String"></constructor-arg>
+        <constructor-arg value="${redis.port}" type="int"></constructor-arg>
     </bean>
 
     <bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig"></bean>
