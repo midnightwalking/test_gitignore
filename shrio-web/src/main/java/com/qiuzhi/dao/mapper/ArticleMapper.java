@@ -22,7 +22,7 @@ public interface ArticleMapper {
 
     List<Article> selectByExample(ArticleExample example);
 
-    Article selectByPrimaryKey(Integer id);
+    Article selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") Article record, @Param("example") ArticleExample example);
 
