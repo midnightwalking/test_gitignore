@@ -297,3 +297,15 @@ CREATE TABLE `user_roles` (
 -- ----------------------------
 INSERT INTO `user_roles` VALUES ('1', 'qiuzhi', 'admin');
 INSERT INTO `user_roles` VALUES ('2', 'qiuzhi', 'group');
+
+
+CREATE TABLE `article` (
+  `ID` varchar(38) NOT NULL COMMENT '主键',
+  `TITLE` varchar(88) NOT NULL COMMENT '文章标题',
+  `TYPE` varchar(255) DEFAULT NULL COMMENT '文章类型',
+  `CREATE_TIME` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `CONTENT` longtext NOT NULL COMMENT '文章内容',
+  `SIMPLE_INTRODUCTION` varchar(88) NOT NULL COMMENT '文章简介',
+  `VISIT_COUNT` int(5) DEFAULT NULL COMMENT '浏览人数',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

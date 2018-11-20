@@ -1,6 +1,7 @@
 package com.qiuzhi.controller;
 
 import com.qiuzhi.dao.ArticleDao;
+import com.qiuzhi.dao.mapper.ArticleDAO;
 import com.qiuzhi.dao.mapper.ArticleMapper;
 import com.qiuzhi.utils.IDUtil;
 import com.vo.Article;
@@ -10,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,37 +28,47 @@ import java.util.Map;
 @Controller
 @RequestMapping("/article")
 public class ArticleController {
-
-    private final static Log logger = LogFactory.getLog(ArticleController.class);
+    public static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
-    private ArticleMapper articleMapper;
+    private ArticleDAO articleDAO;
+
 
     @RequestMapping(value = "/add")
     @ResponseBody
     public ReturnObject addArticle(Article article){
-        logger.info("传入的文章内容为：" + article.getContent());
+        LOG.info("传入的文章内容为：" + article.getContent());
         article.setId(IDUtil.getUUID32());
-        articleMapper.insert(article);
+        articleDAO.insert(article);
         return new ReturnObject("0","操作成功");
     }
 
     @RequestMapping(value = "/get/{id}")
     @ResponseBody
     public ReturnObject getArticleById(@PathVariable String id){
-        Article article = articleMapper.selectByPrimaryKey(id);
+        Article article = articleDAO.selectByPrimaryKey(id);
         return new ReturnObject("0","操作成功",article);
     }
 
     @RequestMapping("/getPageInfo")
-    public @ResponseBody Map<String,Object> getPageInfo(int limit, int offset) {
-        System.out.println("limit is:"+limit);
-        System.out.println("offset is:"+offset);
+    public @ResponseBody Map<String,Object> getPageInfo(int limit, int offset,Article article) {
+        LOG.info("getPageInfo? limit={}, offset={}, draw={}, qry={}", limit, offset, article.toString());
         ArticleExample articleExample = new ArticleExample();
-        long totalRecord = articleMapper.countByExample(articleExample);
+        long totalRecord = articleDAO.countByExample(articleExample);
         articleExample.setLimit(limit);
-        articleExample.setOffset(offset);
-        List<Article> articles = articleMapper.selectByExample(articleExample);
+        articleExample.setOffset((long) offset);
+
+        if(!StringUtils.isEmpty(article.getId())){
+            articleExample.createCriteria().andIdLike("%" + article.getId() + "%");
+        }
+        if(!StringUtils.isEmpty(article.getId())){
+            articleExample.createCriteria().andContentLike("%" + article.getContent() + "%");
+        }
+
+        List<Article> articles = articleDAO.selectByExample(articleExample);
+        for(Article a : articles){
+            System.out.println(a);
+        }
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("total", totalRecord);
         map.put("rows", articles);
