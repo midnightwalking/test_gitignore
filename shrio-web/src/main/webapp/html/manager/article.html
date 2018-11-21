@@ -383,17 +383,16 @@
                         toastr.warning('请选择有效数据');
                         return;
                     }
-                    var arrayObj = new Array();
+                    var arrayObj = [];
                     for(var i = 0; i < arrselections.length; i++){
-                        arrayObj.push(arrselections[i].id);
+                        arrayObj.push(arrselections[i].id+"");
                     }
-                    var jsonString = JSON.stringify(arrayObj);
                     $.ajax({
                         type: "post",
                         url: "/shrio-web/article",
                         data: {
                             _method : "delete",
-                            ids: jsonString
+                            ids: arrayObj
                         },
                         async: true,
                         dataType: "json",

@@ -27,18 +27,5 @@
 		<package name="com.vo" />
 	</typeAliases>
 
-	<!-- 类型转换处理器 -->
-	<typeHandlers>
-		<!-- 
-		<typeHandler jdbcType="CLOB" handler="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
-		<typeHandler jdbcType="BLOB" handler="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
-		 -->
-	</typeHandlers>
-
-
-	<!-- 映射文件 -->
-	<!--<mappers>-->
-		<!--<mapper resource="./sqlmap/ArticleMapper.xml" />-->
-	<!--</mappers>-->
 
 </configuration>

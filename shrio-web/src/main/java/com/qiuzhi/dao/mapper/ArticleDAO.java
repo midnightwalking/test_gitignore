@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ArticleDAO extends MyBatisBaseDao<Article, String, ArticleExample> {
+
+    int mydelete(String id);
 }

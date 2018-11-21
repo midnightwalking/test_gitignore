@@ -10,4 +10,6 @@ import com.vo.Article;
 public interface ArticleDao {
 
     void addArticle(Article article);
+
+    void deleteArticle(String id);
 }

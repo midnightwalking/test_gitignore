@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">
         <property name="url" value="${dataSource.url}"></property>
@@ -25,6 +26,33 @@
         <property name="mapperLocations" value="classpath:/spring/sqlmap/*Mapper.xml"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
+
+    <!-- 事物配置 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+
+    <!-- 配置事务特性 ，配置add、delete和update开始的方法，事务传播特性为required -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="init*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="allManagerMethod" expression="execution (* com.qiuzhi.controller..*.*(..))" />
+        <!--<aop:pointcut id="allManagerMethod" expression="execution (* com.qdhtxx.service.*.impl.*.*(..))" />-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />
+    </aop:config>
 
 
     <!-- mapper注解扫描器配置,扫描@MapperScan注解,自动生成代码对象 -->

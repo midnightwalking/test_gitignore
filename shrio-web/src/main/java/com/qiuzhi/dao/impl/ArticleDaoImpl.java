@@ -23,4 +23,12 @@ public class ArticleDaoImpl implements ArticleDao {
 
         jdbcTemplate.update(sql, article.getId(), article.getContent());
     }
+
+    @Override
+    public void deleteArticle(String id) {
+        String sql = "delete from article where id=?";
+        jdbcTemplate.update(sql,id);
+    }
+
+
 }

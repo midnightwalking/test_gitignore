@@ -1,22 +1,18 @@
 package com.qiuzhi.controller;
 
-import com.qiuzhi.dao.ArticleDao;
 import com.qiuzhi.dao.mapper.ArticleDAO;
-import com.qiuzhi.dao.mapper.ArticleMapper;
 import com.qiuzhi.utils.IDUtil;
 import com.vo.Article;
 import com.vo.ArticleExample;
 import com.vo.ReturnObject;
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author qiuzhi
@@ -29,7 +25,6 @@ public class ArticleController {
 
     @Autowired
     private ArticleDAO articleDAO;
-
     /**
      *@描述 新增文章
      *@参数 
@@ -88,15 +83,18 @@ public class ArticleController {
 
     @RequestMapping(value = "/article" , method = RequestMethod.DELETE)
     @ResponseBody
-    public ReturnObject deleteArticleById(@RequestParam("ids") List<String> idList){
-//        ArticleExample articleExample = new ArticleExample();
-//        articleExample.or().andIdIn(idList);
-//        int i = articleDAO.deleteByExample(articleExample);
-//        System.out.println("删除了：" + i + "条记录");
+    public ReturnObject deleteArticleById(@RequestParam(value = "ids[]") String[] ids){
 
-        for(String id : idList){
-            articleDAO.deleteByPrimaryKey(id);
+
+        try{
+            ArticleExample articleExample = new ArticleExample();
+            articleExample.or().andIdIn(new ArrayList<String>(Arrays.asList(ids)));
+            int i = articleDAO.deleteByExample(articleExample);
+            System.out.println("删除了：" + i + "条记录");
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
         return new ReturnObject("0","操作成功");
     }
 
