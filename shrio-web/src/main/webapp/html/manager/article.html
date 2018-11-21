@@ -19,7 +19,6 @@
             width: 100%;
         }
 
-
         #bysf .header {
             height: 100px;
             background-color: #666;
@@ -45,14 +44,6 @@
             text-align: center;
         }
 
-        /*.clearfix::after {*/
-            /*content: "";*/
-            /*display: block;*/
-            /*clear: both;*/
-            /*visibility: hidden;*/
-            /*height: 0;*/
-            /*overflow: hidden;*/
-        /*}*/
     </style>
 </head>
 <body>
@@ -63,332 +54,371 @@
         <div class="main col">
             <div class="main-wrap">
                 <div class="panel-body" style="padding-bottom:0px;">
-                <div class="panel panel-default">
-                    <div class="panel-heading">查询条件</div>
-                    <div class="panel-body">
-                        <form id="formSearch" class="form-horizontal">
-                            <div class="form-group" style="margin-top:15px">
-                                <label class="control-label col-sm-1" for="txt_search_id">ID</label>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="txt_search_id">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">查询条件</div>
+                        <div class="panel-body">
+                            <form id="formSearch" class="form-horizontal">
+                                <div class="form-group" style="margin-top:15px">
+                                    <label class="control-label col-sm-1" for="txt_search_id">ID</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="txt_search_id">
+                                    </div>
+                                    <label class="control-label col-sm-1" for="txt_search_content">内容</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="txt_search_content">
+                                    </div>
+                                    <div class="col-sm-4" style="text-align:left;">
+                                        <button type="button" style="margin-left:50px" id="btn_query"
+                                                class="btn btn-primary">查询
+                                        </button>
+                                    </div>
                                 </div>
-                                <label class="control-label col-sm-1" for="txt_search_content">内容</label>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="txt_search_content">
-                                </div>
-                                <div class="col-sm-4" style="text-align:left;">
-                                    <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
+                    <div id="toolbar" class="btn-group">
+                        <button id="btn_add" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                        </button>
+                        <button id="btn_edit" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+                        </button>
+                        <button id="btn_delete" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                        </button>
+                    </div>
+                    <table id="tb_departments" class="table"></table>
                 </div>
-                <div id="toolbar" class="btn-group">
-                    <button id="btn_add" type="button" class="btn btn-default" >
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-                    </button>
-                    <button id="btn_edit" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
-                    </button>
-                    <button id="btn_delete" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
-                    </button>
-                </div>
-                <table id="tb_departments" class="table"></table>
             </div>
         </div>
+        <div class="footer">footer</div>
     </div>
-    <div class="footer">footer</div>
-</div>
 
 
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 80%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                   新增文章
-                </h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="title" class="col-sm-1 control-label">标题</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="title"
-                               placeholder="请输入标题">
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        新增文章
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-1 control-label">标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="title"
+                                   placeholder="请输入标题">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="editor" style="margin-top: 65px;">
+                            <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+                        </div>
+                        <!--<button id="btn1">获取html</button>-->
+                        <!--<button id="btn2">获取text</button>-->
                     </div>
                 </div>
-                <div class="form-group">
-                    <div id="editor" style="margin-top: 65px;">
-                        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
-                    </div>
-                    <button id="btn1">获取html</button>
-                    <button id="btn2">获取text</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="submit">
+                        提交更改
+                    </button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-                <button type="button" class="btn btn-primary" id="submit">
-                    提交更改
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
 
-<script>
-    $(function () {
+    <script>
+        // 定义变量
+        var editor;
+        var addOrUpdate; // 判断是否是增加
+        $(function () {
 
-        //1.初始化Table
-        var oTable = new TableInit();
-        oTable.Init();
+            //1.初始化Table
+            var oTable = new TableInit();
+            oTable.Init();
 
-        //2.初始化Button的点击事件
-        var oButtonInit = new ButtonInit();
-        oButtonInit.Init();
+            //2.初始化Button的点击事件
+            var oButtonInit = new ButtonInit();
+            oButtonInit.Init();
 
+            // 初始化wangEditor
+            var E = window.wangEditor
+            editor = new E('#editor')
+            editor.customConfig.showLinkImg = false;
 
+            // 配置服务器端地址
+            editor.customConfig.uploadImgServer = 'http://localhost:8080/shrio-web/photo/wangEditorUpload'
+            editor.customConfig.uploadFileName = 'photo'
 
-        // 初始化wangEditor
-        var E = window.wangEditor
-        var editor = new E('#editor')
-        // 或者 var editor = new E( document.getElementById('editor') )
-        // editor.customConfig.uploadImgShowBase64 = true;   // 使用 base64 保存图片
-        // 隐藏“网络图片”tab
-        editor.customConfig.showLinkImg = false;
+            // 将图片大小限制为 3M
+            editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
 
+            // 限制一次最多上传 5 张图片
+            editor.customConfig.uploadImgMaxLength = 5
 
-
-
-        // 配置服务器端地址
-        //本地配置
-        //ip路径需与访问ip一致,要么同为localhost ,要么同为ip地址
-        editor.customConfig.uploadImgServer = 'http://localhost:8080/shrio-web/photo/wangEditorUpload'
-        editor.customConfig.uploadFileName = 'photo'
-
-        // 将图片大小限制为 3M
-        editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
-
-        // 限制一次最多上传 5 张图片
-        editor.customConfig.uploadImgMaxLength = 5
-
-        //处理返回数据
-        editor.customConfig.uploadImgHooks = {
-            before: function (xhr, editor, files) {
-                // 图片上传之前触发
-                // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，files 是选择的图片文件
-
-                // 如果返回的结果是 {prevent: true, msg: 'xxxx'} 则表示用户放弃上传
-                // return {
-                //     prevent: true,
-                //     msg: '放弃上传'
-                // }
-            },
-            success: function (xhr, editor, result) {
-                // 图片上传并返回结果，图片插入成功之后触发
-                // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
-
-                console.info("success:" + result);
-            },
-            fail: function (xhr, editor, result) {
-                // 图片上传并返回结果，但图片插入错误时触发
-                // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
-            },
-            error: function (xhr, editor) {
-                // 图片上传出错时触发
-                // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象
-            },
-            timeout: function (xhr, editor) {
-                // 图片上传超时时触发
-                // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象
-            },
-
-            // 如果服务器端返回的不是 {errno:0, data: [...]} 这种格式，可使用该配置
-            // （但是，服务器端返回的必须是一个 JSON 格式字符串！！！否则会报错）
-            customInsert: function (insertImg, result, editor) {
-                //         // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
-                //         // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
-                //
-                //         // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
-
-                console.info("success:" + result.data[0]);
-                var url = result.data[0]
-                insertImg(url)
-                //
-                //         // result 必须是一个 JSON 格式字符串！！！否则报错
+            //处理返回数据
+            editor.customConfig.uploadImgHooks = {
+                before: function (xhr, editor, files) {
+                },
+                success: function (xhr, editor, result) {
+                },
+                fail: function (xhr, editor, result) {
+                },
+                error: function (xhr, editor) {
+                },
+                timeout: function (xhr, editor) {
+                },
+                customInsert: function (insertImg, result, editor) {
+                    var url = result.data[0]
+                    insertImg(url)
+                }
             }
-        }
 
-        //上传图片的错误提示默认使用alert弹出，你也可以自定义用户体验更好的提示方式
-        editor.customConfig.customAlert = function (info) {
-            // info 是需要提示的内容
-            alert('自定义提示：' + info)
-        }
-        editor.create();
+            //上传图片的错误提示默认使用alert弹出，你也可以自定义用户体验更好的提示方式
+            editor.customConfig.customAlert = function (info) {
+                // info 是需要提示的内容
+                alert('自定义提示：' + info)
+            }
+            editor.create();
 
-        $("#submit").on('click',function(){
-            var simpleIntr = removeHTMLTag(editor.txt.text());
-            $.ajax({
-                type: "POST",
-                url: "/shrio-web/article/add",
-                data: {
-                    title : $("#title").val(),
-                    content: editor.txt.html(),
-                    simpleIntroduction: simpleIntr.substring(0,87)
-                },
-                async: true,
-                dataType: "json",
-                success: function(result) {
-                    if(result.retCode == '0'){
-                        alert("操作成功");
-                        $('#addArticleModal').modal('hide');
-                        $("#tb_departments").bootstrapTable('refresh');
-                    }else{
-                        alert(result.retMsg);
-                    }
-                },
-                error : function(data) {
-                    alert("error")
+            // 提交新增文章
+            $("#submit").on('click', function () {
+                if(addOrUpdate == "" || typeof(addOrUpdate) == "undefined"){
+                    alert("提交错误");
+                    return ;
                 }
+                var simpleIntr = removeHTMLTag(editor.txt.text());
+                if(addOrUpdate == "add"){
+                    $.ajax({
+                        type: "POST",
+                        url: "/shrio-web/article",
+                        data: {
+                            title: $("#title").val(),
+                            content: editor.txt.html(),
+                            simpleIntroduction: simpleIntr.substring(0, 87)
+                        },
+                        async: true,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.retCode == '0') {
+                                alert("操作成功");
+                                $('#addArticleModal').modal('hide');
+                                $("#tb_departments").bootstrapTable('refresh');
+                            } else {
+                                alert(result.retMsg);
+                            }
+                        },
+                        error: function (data) {
+                            alert("error")
+                        }
+                    });
+                }else{
+                    var selectId = $("#tb_departments").bootstrapTable('getSelections')[0].id;
+                    $.ajax({
+                        type: "post",
+                        url: "/shrio-web/article",
+                        data: {
+                            _method : "put",
+                            id: selectId,
+                            title: $("#title").val(),
+                            content: editor.txt.html(),
+                            simpleIntroduction: simpleIntr.substring(0, 87)
+                        },
+                        async: true,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.retCode == '0') {
+                                alert("操作成功");
+                                $('#addArticleModal').modal('hide');
+                                $("#tb_departments").bootstrapTable('refresh');
+                            } else {
+                                alert(result.retMsg);
+                            }
+                        },
+                        error: function (data) {
+                            alert("error");
+                        }
+                    });
+                }
+
+
             });
+
+
+            // 过滤各种标签
+            function removeHTMLTag(str) {
+                str = str.replace(/<\/?[^>]*>/g, ''); //去除HTML tag
+                str = str.replace(/[ | ]*\n/g, '\n'); //去除行尾空白
+                //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+                str = str.replace(/ /ig, '');//去掉
+                str = str.replace(/&nbsp;/gi, '');
+                return str;
+            }
         });
 
-
-        $("#searchButton").on('click',function () {
-            var id = $("#searchArticleInput").val();
-            $.ajax({
-                type: "GET",
-                url: "/shrio-web/article/get/"+id,
-                async: true,
-                dataType: "json",
-                success: function(result) {
-                    if(result.retCode == '0'){
-                        // $("#showDiv").html(result.returnVal.content);
-                        editor.txt.html(result.returnVal.content);
-                    }else{
-                        alert(result.retMsg);
-                    }
-                },
-                error : function(data) {
-                    alert("error")
-                }
-            });
-        });
-
-
-        document.getElementById('btn1').addEventListener('click', function () {
-            // 读取 html
-            alert(editor.txt.html())
-        }, false);
-
-        document.getElementById('btn2').addEventListener('click', function () {
-            // 读取 text
-            var text = removeHTMLTag(editor.txt.text());
-            console.info(text.substring(0,88));
-            alert(editor.txt.text());
-        }, false);
-
-        // 过滤各种标签
-        function removeHTMLTag(str) {
-            str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
-            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
-            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
-            str=str.replace(/ /ig,'');//去掉
-            str=str.replace(/&nbsp;/gi,'');
-            return str;
-        }
-    });
-
-    // bootstrap-table
-    var TableInit = function () {
-        var oTableInit = new Object();
-        //初始化Table
-        oTableInit.Init = function () {
-            $('#tb_departments').bootstrapTable({
-                url: '/shrio-web/article/getPageInfo',         //请求后台的URL（*）
-                method: 'get',                      //请求方式（*）
-                toolbar: '#toolbar',                //工具按钮用哪个容器
-                striped: true,                      //是否显示行间隔色
-                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-                pagination: true,                   //是否显示分页（*）
-                sortable: false,                     //是否启用排序
-                sortOrder: "asc",                   //排序方式
-                queryParams: oTableInit.queryParams,//传递参数（*）
-                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                pageNumber: 1,                       //初始化加载第一页，默认第一页
-                pageSize: 10,                       //每页的记录行数（*）
-                pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-                // search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-                strictSearch: true,
-                showColumns: true,                  //是否显示所有的列
-                showRefresh: true,                  //是否显示刷新按钮
-                minimumCountColumns: 2,             //最少允许的列数
-                clickToSelect: true,                //是否启用点击选中行
-                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-                uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
-                showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
-                cardView: false,                    //是否显示详细视图
-                detailView: false,                   //是否显示父子表
-                columns: [{
-                    checkbox: true
-                }, {
-                    field: 'id',
-                    title: '编号'
-                }, {
-                    field: 'simpleIntroduction',
-                    title: '内容'
-                },{
-                    field: 'createTime',
-                    title: '创建时间'
-                },]
-            });
-        };
-
-        //得到查询的参数
-        oTableInit.queryParams = function (params) {
-            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-                limit: params.limit,   //页面大小
-                offset: params.offset,  //页码
-                id: $("#txt_search_id").val(),
-                content: $("#txt_search_content").val()
+        // bootstrap-table
+        var TableInit = function () {
+            var oTableInit = new Object();
+            //初始化Table
+            oTableInit.Init = function () {
+                $('#tb_departments').bootstrapTable({
+                    url: '/shrio-web/articles',         //请求后台的URL（*）
+                    method: 'get',                      //请求方式（*）
+                    toolbar: '#toolbar',                //工具按钮用哪个容器
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sortable: false,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
+                    queryParams: oTableInit.queryParams,//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                    // search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                    strictSearch: true,
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                    showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: false,                   //是否显示父子表
+                    columns: [{
+                        checkbox: true
+                    }, {
+                        field: 'id',
+                        title: '编号'
+                    }, {
+                        field: 'title',
+                        title: '标题'
+                    },{
+                        field: 'simpleIntroduction',
+                        title: '内容'
+                    }, {
+                        field: 'createTime',
+                        title: '创建时间'
+                    },]
+                });
             };
-            return temp;
-        };
-        return oTableInit;
-    };
 
-
-    var ButtonInit = function () {
-        var oInit = new Object();
-        var postdata = {};
-
-        oInit.Init = function () {
-            //初始化页面上面的按钮事件
-            $("#btn_add").on('click', function () {
-               $("#addArticleModal").modal('show');
-            });
-            $("#btn_edit").on('click', function () {
-                alert("修改");
-            });
-            $("#btn_delete").on('click', function () {
-                alert("删除");
-            });
-
-            $("#btn_query").click(function () {
-                $("#tb_departments").bootstrapTable('refresh');
-            });
+            //得到查询的参数
+            oTableInit.queryParams = function (params) {
+                var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    limit: params.limit,   //页面大小
+                    offset: params.offset,  //页码
+                    id: $("#txt_search_id").val(),
+                    content: $("#txt_search_content").val()
+                };
+                return temp;
+            };
+            return oTableInit;
         };
 
-        return oInit;
-    };
-</script>
 
+        var ButtonInit = function () {
+            var oInit = new Object();
+            var postdata = {};
+            oInit.Init = function () {
+                //初始化页面上面的按钮事件
+                // 新增按钮
+                $("#btn_add").on('click', function () {
+                    // 清空
+                    $("#title").val("");
+                    editor.txt.clear();
+                    addOrUpdate = "add";
+                    $("#addArticleModal").modal('show');
+                });
+
+                // 编辑按钮
+                $("#btn_edit").on('click', function () {
+                    var arrselections = $("#tb_departments").bootstrapTable('getSelections');
+                    if (arrselections.length > 1) {
+                        alert('只能选择一行进行编辑');
+                        return;
+                    }
+                    if (arrselections.length <= 0) {
+                        alert('请选择有效数据');
+                        return;
+                    }
+                    addOrUpdate = "update";
+                    var articleId = arrselections[0].id;
+                    $.ajax({
+                        type: "GET",
+                        url: "/shrio-web/article/" + articleId,
+                        async: true,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.retCode == '0') {
+                                $("#title").val("");
+                                $("#title").val(result.returnVal.title);
+                                editor.txt.clear();
+                                editor.txt.html(result.returnVal.content);
+
+                                $("#addArticleModal").modal('show');
+                            } else {
+                                alert("获取文章失败" + result.retMsg);
+                            }
+                        },
+                        error: function (data) {
+                            alert("获取文章失败");
+                        }
+                    });
+                });
+
+                // 删除按钮
+                $("#btn_delete").on('click', function () {
+                    var arrselections = $("#tb_departments").bootstrapTable('getSelections');
+                    if (arrselections.length <= 0) {
+                        toastr.warning('请选择有效数据');
+                        return;
+                    }
+                    var arrayObj = new Array();
+                    for(var i = 0; i < arrselections.length; i++){
+                        arrayObj.push(arrselections[i].id);
+                    }
+                    var jsonString = JSON.stringify(arrayObj);
+                    $.ajax({
+                        type: "post",
+                        url: "/shrio-web/article",
+                        data: {
+                            _method : "delete",
+                            ids: jsonString
+                        },
+                        async: true,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.retCode == '0') {
+                                alert("操作成功");
+                                $("#tb_departments").bootstrapTable('refresh');
+                            } else {
+                                alert(result.retMsg);
+                            }
+                        },
+                        error: function (data) {
+                            alert("error");
+                        }
+                    });
+                });
+
+                $("#btn_query").click(function () {
+                    $("#tb_departments").bootstrapTable('refresh');
+                });
+            };
+
+            return oInit;
+        };
+    </script>
 </div>
 </body>
 </html>

@@ -13,6 +13,11 @@
         <property name="dataSource" ref="dataSource"></property>
     </bean>
 
+    <!-- 配置事务管理 start -->
+    <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<property name="dataSource" ref="dataSource" />-->
+    <!--</bean>-->
+    <!--  END -->
 
     <!-- mybatis文件配置,mapper.xml文件扫描 -->
     <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

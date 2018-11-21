@@ -12,9 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +24,21 @@ import java.util.Map;
  * @description
  */
 @Controller
-@RequestMapping("/article")
 public class ArticleController {
     public static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
     private ArticleDAO articleDAO;
 
-
-    @RequestMapping(value = "/add")
+    /**
+     *@描述 新增文章
+     *@参数 
+     *@返回值  
+     *@创建人  qiuzhi
+     *@创建时间  2018/11/21
+     */
+    
+    @RequestMapping(value = "/article" , method = RequestMethod.POST)
     @ResponseBody
     public ReturnObject addArticle(Article article){
         LOG.info("传入的文章内容为：" + article.getContent());
@@ -43,14 +47,69 @@ public class ArticleController {
         return new ReturnObject("0","操作成功");
     }
 
-    @RequestMapping(value = "/get/{id}")
+    /**
+     *@描述 根据ID获取文章
+     *@参数 
+     *@返回值 
+     *@创建人  qiuzhi
+     *@创建时间  2018/11/21
+     */
+
+    @RequestMapping(value = "/article/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ReturnObject getArticleById(@PathVariable String id){
         Article article = articleDAO.selectByPrimaryKey(id);
         return new ReturnObject("0","操作成功",article);
     }
 
-    @RequestMapping("/getPageInfo")
+    /**
+     *@描述 更新
+     *@参数 
+     *@返回值 
+     *@创建人  qiuzhi
+     *@创建时间  2018/11/21
+     */
+
+    @RequestMapping(value = "/article" , method = RequestMethod.PUT)
+    @ResponseBody
+    public ReturnObject updateArticleById(Article article){
+        articleDAO.updateByPrimaryKey(article);
+        return new ReturnObject("0","操作成功");
+    }
+
+
+    /**
+     *@描述 删除
+     *@参数 
+     *@返回值 
+     *@创建人  qiuzhi
+     *@创建时间  2018/11/21
+     */
+
+    @RequestMapping(value = "/article" , method = RequestMethod.DELETE)
+    @ResponseBody
+    public ReturnObject deleteArticleById(@RequestParam("ids") List<String> idList){
+//        ArticleExample articleExample = new ArticleExample();
+//        articleExample.or().andIdIn(idList);
+//        int i = articleDAO.deleteByExample(articleExample);
+//        System.out.println("删除了：" + i + "条记录");
+
+        for(String id : idList){
+            articleDAO.deleteByPrimaryKey(id);
+        }
+        return new ReturnObject("0","操作成功");
+    }
+
+
+    /**
+     *@描述 获取文章列表
+     *@参数 
+     *@返回值 
+     *@创建人  qiuzhi
+     *@创建时间  2018/11/21
+     */
+
+    @RequestMapping(value = "/articles" , method = RequestMethod.GET)
     public @ResponseBody Map<String,Object> getPageInfo(int limit, int offset,Article article) {
         LOG.info("getPageInfo? limit={}, offset={}, draw={}, qry={}", limit, offset, article.toString());
         ArticleExample articleExample = new ArticleExample();
@@ -66,9 +125,6 @@ public class ArticleController {
         }
 
         List<Article> articles = articleDAO.selectByExample(articleExample);
-        for(Article a : articles){
-            System.out.println(a);
-        }
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("total", totalRecord);
         map.put("rows", articles);
