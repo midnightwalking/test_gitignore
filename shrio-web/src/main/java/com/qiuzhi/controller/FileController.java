@@ -1,13 +1,16 @@
 package com.qiuzhi.controller;
 
+import com.qiuzhi.dao.mapper.ArticleMapper;
 import com.qiuzhi.dao.mapper.ImginfoMapper;
 import com.vo.AdPictureURL;
+import com.vo.Article;
 import com.vo.Imginfo;
 import com.vo.ReturnObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,10 +38,13 @@ public class FileController {
     @Autowired
     private ImginfoMapper imginfoMapper;
 
+    @Autowired
+    private ArticleMapper articleMapper;
+
     @RequestMapping(value = "/wangEditorUpload")
     @CrossOrigin
     @ResponseBody
-    public AdPictureURL upload(@RequestParam("photo") List<MultipartFile> list, ServletRequest request) {
+    public AdPictureURL addImg(@RequestParam("photo") List<MultipartFile> list, ServletRequest request, String articleId) {
         Integer error = 0;
         List<String> urls = new ArrayList<>();
         AdPictureURL returnAd = new AdPictureURL();
@@ -66,12 +72,19 @@ public class FileController {
             }
         }
         // Mybatis 批量插入 TODO
-
         for(String fileUrl : urls){
             Imginfo imginfo = new Imginfo();
             imginfo.setImgurl(fileUrl);
             imginfoMapper.insert(imginfo);
         }
+
+        // 给文章缩略图字段插入值
+        if(!StringUtils.isEmpty(articleId)){
+            Article article = articleMapper.selectByPrimaryKey(articleId);
+            article.setShrinkImgUrl(urls.get(0));
+            articleMapper.updateByPrimaryKey(article);
+        }
+
         returnAd.setData(urls);
         returnAd.setErrno(error);
         return returnAd;

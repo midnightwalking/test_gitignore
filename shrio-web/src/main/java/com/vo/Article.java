@@ -1,6 +1,5 @@
 package com.vo;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,11 +32,6 @@ public class Article implements Serializable {
     private Date createTime;
 
     /**
-     * 文章内容
-     */
-    private String content;
-
-    /**
      * 文章简介
      */
     private String simpleIntroduction;
@@ -46,6 +40,16 @@ public class Article implements Serializable {
      * 浏览人数
      */
     private Integer visitCount;
+
+    /**
+     * 本地存放的URL地址
+     */
+    private String shrinkImgUrl;
+
+    /**
+     * 文章内容
+     */
+    private String content;
 
     private static final long serialVersionUID = 1L;
 
@@ -83,14 +87,6 @@ public class Article implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public String getSimpleIntroduction() {
         return simpleIntroduction;
     }
@@ -105,6 +101,22 @@ public class Article implements Serializable {
 
     public void setVisitCount(Integer visitCount) {
         this.visitCount = visitCount;
+    }
+
+    public String getShrinkImgUrl() {
+        return shrinkImgUrl;
+    }
+
+    public void setShrinkImgUrl(String shrinkImgUrl) {
+        this.shrinkImgUrl = shrinkImgUrl;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override
@@ -123,9 +135,10 @@ public class Article implements Serializable {
             && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getSimpleIntroduction() == null ? other.getSimpleIntroduction() == null : this.getSimpleIntroduction().equals(other.getSimpleIntroduction()))
-            && (this.getVisitCount() == null ? other.getVisitCount() == null : this.getVisitCount().equals(other.getVisitCount()));
+            && (this.getVisitCount() == null ? other.getVisitCount() == null : this.getVisitCount().equals(other.getVisitCount()))
+            && (this.getShrinkImgUrl() == null ? other.getShrinkImgUrl() == null : this.getShrinkImgUrl().equals(other.getShrinkImgUrl()))
+            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
     }
 
     @Override
@@ -136,9 +149,10 @@ public class Article implements Serializable {
         result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getSimpleIntroduction() == null) ? 0 : getSimpleIntroduction().hashCode());
         result = prime * result + ((getVisitCount() == null) ? 0 : getVisitCount().hashCode());
+        result = prime * result + ((getShrinkImgUrl() == null) ? 0 : getShrinkImgUrl().hashCode());
+        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         return result;
     }
 
@@ -152,9 +166,10 @@ public class Article implements Serializable {
         sb.append(", title=").append(title);
         sb.append(", type=").append(type);
         sb.append(", createTime=").append(createTime);
-        sb.append(", content=").append(content);
         sb.append(", simpleIntroduction=").append(simpleIntroduction);
         sb.append(", visitCount=").append(visitCount);
+        sb.append(", shrinkImgUrl=").append(shrinkImgUrl);
+        sb.append(", content=").append(content);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

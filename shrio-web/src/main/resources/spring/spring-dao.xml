@@ -50,7 +50,6 @@
 
     <aop:config>
         <aop:pointcut id="allManagerMethod" expression="execution (* com.qiuzhi.controller..*.*(..))" />
-        <!--<aop:pointcut id="allManagerMethod" expression="execution (* com.qdhtxx.service.*.impl.*.*(..))" />-->
         <aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />
     </aop:config>
 

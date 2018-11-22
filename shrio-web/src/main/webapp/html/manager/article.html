@@ -43,7 +43,15 @@
             color: #fff;
             text-align: center;
         }
-
+        #result{
+            width: 200px;
+            height:200px;
+            border:1px solid #eee;
+        }
+        #result img{
+            width: 200px;
+            height: 200px;
+        }
     </style>
 </head>
 <body>
@@ -59,11 +67,11 @@
                         <div class="panel-body">
                             <form id="formSearch" class="form-horizontal">
                                 <div class="form-group" style="margin-top:15px">
-                                    <label class="control-label col-sm-1" for="txt_search_id">ID</label>
+                                    <label class="control-label col-sm-1" for="txt_search_title">标题</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="txt_search_id">
+                                        <input type="text" class="form-control" id="txt_search_title">
                                     </div>
-                                    <label class="control-label col-sm-1" for="txt_search_content">内容</label>
+                                    <label class="control-label col-sm-1" for="txt_search_content">简介</label>
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control" id="txt_search_content">
                                     </div>
@@ -85,6 +93,9 @@
                         </button>
                         <button id="btn_delete" type="button" class="btn btn-default">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                        </button>
+                        <button id="btn_imgEdit" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-link" aria-hidden="true"></span>链接图
                         </button>
                     </div>
                     <table id="tb_departments" class="table"></table>
@@ -134,6 +145,36 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+
+    <div class="modal fade" id="shrinkImgEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        添加图片
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="tf">
+                        <span>附属文章ID:</span><input type="text" class="form-control" name="articleId" id="idForImg" readonly="readonly"></br>
+                        <span>选择文件:</span><input type="file" name="photo" id="pic" onchange = "selectFile()"/>
+                    </form>
+                    <div id = "result"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="imgEditSubmit">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
 
     <script>
         // 定义变量
@@ -249,7 +290,28 @@
                     });
                 }
 
+            });
 
+            $("#imgEditSubmit").on('click',function(){
+                var form = new FormData(document.getElementById("tf"));
+                $.ajax({
+                    url:"/shrio-web/photo/wangEditorUpload",
+                    type:"post",
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function(data){
+                        console.info(data);
+                        if(data.errno == 0){
+                            alert("上传成功");
+                        }else {
+                            alert("??");
+                        }
+                    },
+                    error:function(e){
+                        alert("错误！！");
+                    }
+                });
             });
 
 
@@ -262,7 +324,29 @@
                 str = str.replace(/&nbsp;/gi, '');
                 return str;
             }
+
+
         });
+
+
+        function selectFile(){
+            var files = document.getElementById('pic').files;
+            console.log(files[0]);
+            if(files.length == 0){
+                return;
+            }
+            var file = files[0];
+            //把上传的图片显示出来
+            var reader = new FileReader();
+            // 将文件以Data URL形式进行读入页面
+            console.log(reader);
+            reader.readAsBinaryString(file);
+            reader.onload = function(f){
+                var result = document.getElementById("result");
+                var src = "data:" + file.type + ";base64," + window.btoa(this.result);
+                result.innerHTML = '<img src ="'+src+'"/>';
+            }
+        }
 
         // bootstrap-table
         var TableInit = function () {
@@ -297,14 +381,23 @@
                     columns: [{
                         checkbox: true
                     }, {
+                        title: '序号',
+                        align: 'center',
+                        halign: 'center',
+                        formatter: function (value, row, index) {
+                            var options = $("#tb_departments").bootstrapTable('getOptions');
+                            return options.pageSize * (options.pageNumber - 1) + index + 1;
+                        }
+                    },{
                         field: 'id',
-                        title: '编号'
+                        title: '编号',
+                        visible:false
                     }, {
                         field: 'title',
                         title: '标题'
                     },{
                         field: 'simpleIntroduction',
-                        title: '内容'
+                        title: '简介'
                     }, {
                         field: 'createTime',
                         title: '创建时间'
@@ -317,8 +410,8 @@
                 var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                     limit: params.limit,   //页面大小
                     offset: params.offset,  //页码
-                    id: $("#txt_search_id").val(),
-                    content: $("#txt_search_content").val()
+                    title: $("#txt_search_title").val(),
+                    simpleIntroduction: $("#txt_search_content").val()
                 };
                 return temp;
             };
@@ -406,6 +499,41 @@
                         },
                         error: function (data) {
                             alert("error");
+                        }
+                    });
+                });
+
+                $("#btn_imgEdit").click(function(){
+                    var arrselections = $("#tb_departments").bootstrapTable('getSelections');
+                    if (arrselections.length > 1) {
+                        alert('只能选择一行进行编辑');
+                        return;
+                    }
+                    if (arrselections.length <= 0) {
+                        alert('请选择有效数据');
+                        return;
+                    }
+                    $("#result").html("");
+                    var articleId = arrselections[0].id;
+                    $.ajax({
+                        type: "GET",
+                        url: "/shrio-web/article/" + articleId,
+                        async: true,
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.retCode == '0') {
+                                if(result.returnVal.shrinkImgUrl != null){
+                                    var imgHtml = '<img src ="'+result.returnVal.shrinkImgUrl+'"/>';
+                                    $("#result").html(imgHtml);
+                                }
+                                $("#idForImg").val(articleId);
+                                $("#shrinkImgEdit").modal('show');
+                            } else {
+                                alert("获取文章失败" + result.retMsg);
+                            }
+                        },
+                        error: function (data) {
+                            alert("获取文章失败");
                         }
                     });
                 });
