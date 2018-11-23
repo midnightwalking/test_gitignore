@@ -27,6 +27,9 @@
             font-size: 20px;
             line-height: 100px;
         }
+        #bysf .header a{
+            color:red;
+        }
 
         #bysf .main {
             width: 100%;
@@ -57,7 +60,8 @@
 <body>
 
 <div id="bysf" class="container">
-    <div class="header">后台管理模块</div>
+    <div class="header">后台管理模块
+    <a href="/shrio-web/login.html">登出</a></div>
     <div class="wrapper clearfix">
         <div class="main col">
             <div class="main-wrap">
@@ -263,6 +267,7 @@
                     });
                 }else{
                     var selectId = $("#tb_departments").bootstrapTable('getSelections')[0].id;
+                    var content = editor.txt.html();
                     $.ajax({
                         type: "post",
                         url: "/shrio-web/article",
@@ -301,9 +306,9 @@
                     processData:false,
                     contentType:false,
                     success:function(data){
-                        console.info(data);
                         if(data.errno == 0){
                             alert("上传成功");
+                            $("#shrinkImgEdit").modal('hide');
                         }else {
                             alert("??");
                         }
@@ -331,7 +336,6 @@
 
         function selectFile(){
             var files = document.getElementById('pic').files;
-            console.log(files[0]);
             if(files.length == 0){
                 return;
             }
@@ -339,7 +343,6 @@
             //把上传的图片显示出来
             var reader = new FileReader();
             // 将文件以Data URL形式进行读入页面
-            console.log(reader);
             reader.readAsBinaryString(file);
             reader.onload = function(f){
                 var result = document.getElementById("result");
@@ -476,31 +479,36 @@
                         toastr.warning('请选择有效数据');
                         return;
                     }
-                    var arrayObj = [];
-                    for(var i = 0; i < arrselections.length; i++){
-                        arrayObj.push(arrselections[i].id+"");
-                    }
-                    $.ajax({
-                        type: "post",
-                        url: "/shrio-web/article",
-                        data: {
-                            _method : "delete",
-                            ids: arrayObj
-                        },
-                        async: true,
-                        dataType: "json",
-                        success: function (result) {
-                            if (result.retCode == '0') {
-                                alert("操作成功");
-                                $("#tb_departments").bootstrapTable('refresh');
-                            } else {
-                                alert(result.retMsg);
-                            }
-                        },
-                        error: function (data) {
-                            alert("error");
+                    if(confirm('确定要删除吗')==true){
+                        var arrayObj = [];
+                        for(var i = 0; i < arrselections.length; i++){
+                            arrayObj.push(arrselections[i].id+"");
                         }
-                    });
+                        $.ajax({
+                            type: "post",
+                            url: "/shrio-web/article",
+                            data: {
+                                _method : "delete",
+                                ids: arrayObj
+                            },
+                            async: true,
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.retCode == '0') {
+                                    alert("操作成功");
+                                    $("#tb_departments").bootstrapTable('refresh');
+                                } else {
+                                    alert(result.retMsg);
+                                }
+                            },
+                            error: function (data) {
+                                alert("error");
+                            }
+                        });
+
+                    }else{
+                        return false;
+                    }
                 });
 
                 $("#btn_imgEdit").click(function(){

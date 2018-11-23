@@ -6,12 +6,10 @@
     <result column="TITLE" jdbcType="VARCHAR" property="title" />
     <result column="TYPE" jdbcType="VARCHAR" property="type" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
     <result column="SIMPLE_INTRODUCTION" jdbcType="VARCHAR" property="simpleIntroduction" />
     <result column="VISIT_COUNT" jdbcType="INTEGER" property="visitCount" />
     <result column="SHRINK_IMG_URL" jdbcType="VARCHAR" property="shrinkImgUrl" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.vo.Article">
-    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,38 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, TITLE, `TYPE`, CREATE_TIME, SIMPLE_INTRODUCTION, VISIT_COUNT, SHRINK_IMG_URL
+    ID, TITLE, `TYPE`, CREATE_TIME, CONTENT, SIMPLE_INTRODUCTION, VISIT_COUNT, SHRINK_IMG_URL
   </sql>
-  <sql id="Blob_Column_List">
-    CONTENT
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.vo.ArticleExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from article
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-    <if test="limit != null">
-      <if test="offset != null">
-        limit ${offset}, ${limit}
-      </if>
-      <if test="offset == null">
-        limit ${limit}
-      </if>
-    </if>
-    <if test="forUpdate != null and forUpdate == true">
-      for update
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.vo.ArticleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -129,11 +97,9 @@
       for update
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from article
     where ID = #{id,jdbcType=VARCHAR}
   </select>
@@ -149,11 +115,11 @@
   </delete>
   <insert id="insert" parameterType="com.vo.Article">
     insert into article (ID, TITLE, `TYPE`, 
-      CREATE_TIME, SIMPLE_INTRODUCTION, VISIT_COUNT, 
-      SHRINK_IMG_URL, CONTENT)
+      CREATE_TIME, CONTENT, SIMPLE_INTRODUCTION, 
+      VISIT_COUNT, SHRINK_IMG_URL)
     values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{simpleIntroduction,jdbcType=VARCHAR}, #{visitCount,jdbcType=INTEGER}, 
-      #{shrinkImgUrl,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+      #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, #{simpleIntroduction,jdbcType=VARCHAR}, 
+      #{visitCount,jdbcType=INTEGER}, #{shrinkImgUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.vo.Article">
     insert into article
@@ -170,6 +136,9 @@
       <if test="createTime != null">
         CREATE_TIME,
       </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
       <if test="simpleIntroduction != null">
         SIMPLE_INTRODUCTION,
       </if>
@@ -178,9 +147,6 @@
       </if>
       <if test="shrinkImgUrl != null">
         SHRINK_IMG_URL,
-      </if>
-      <if test="content != null">
-        CONTENT,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -196,6 +162,9 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
       <if test="simpleIntroduction != null">
         #{simpleIntroduction,jdbcType=VARCHAR},
       </if>
@@ -204,9 +173,6 @@
       </if>
       <if test="shrinkImgUrl != null">
         #{shrinkImgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -231,6 +197,9 @@
       <if test="record.createTime != null">
         CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.content != null">
+        CONTENT = #{record.content,jdbcType=VARCHAR},
+      </if>
       <if test="record.simpleIntroduction != null">
         SIMPLE_INTRODUCTION = #{record.simpleIntroduction,jdbcType=VARCHAR},
       </if>
@@ -240,24 +209,7 @@
       <if test="record.shrinkImgUrl != null">
         SHRINK_IMG_URL = #{record.shrinkImgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.content != null">
-        CONTENT = #{record.content,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update article
-    set ID = #{record.id,jdbcType=VARCHAR},
-      TITLE = #{record.title,jdbcType=VARCHAR},
-      `TYPE` = #{record.type,jdbcType=VARCHAR},
-      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
-      SIMPLE_INTRODUCTION = #{record.simpleIntroduction,jdbcType=VARCHAR},
-      VISIT_COUNT = #{record.visitCount,jdbcType=INTEGER},
-      SHRINK_IMG_URL = #{record.shrinkImgUrl,jdbcType=VARCHAR},
-      CONTENT = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -268,6 +220,7 @@
       TITLE = #{record.title,jdbcType=VARCHAR},
       `TYPE` = #{record.type,jdbcType=VARCHAR},
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      CONTENT = #{record.content,jdbcType=VARCHAR},
       SIMPLE_INTRODUCTION = #{record.simpleIntroduction,jdbcType=VARCHAR},
       VISIT_COUNT = #{record.visitCount,jdbcType=INTEGER},
       SHRINK_IMG_URL = #{record.shrinkImgUrl,jdbcType=VARCHAR}
@@ -287,6 +240,9 @@
       <if test="createTime != null">
         CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
       <if test="simpleIntroduction != null">
         SIMPLE_INTRODUCTION = #{simpleIntroduction,jdbcType=VARCHAR},
       </if>
@@ -296,21 +252,7 @@
       <if test="shrinkImgUrl != null">
         SHRINK_IMG_URL = #{shrinkImgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="content != null">
-        CONTENT = #{content,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where ID = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.vo.Article">
-    update article
-    set TITLE = #{title,jdbcType=VARCHAR},
-      `TYPE` = #{type,jdbcType=VARCHAR},
-      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
-      SIMPLE_INTRODUCTION = #{simpleIntroduction,jdbcType=VARCHAR},
-      VISIT_COUNT = #{visitCount,jdbcType=INTEGER},
-      SHRINK_IMG_URL = #{shrinkImgUrl,jdbcType=VARCHAR},
-      CONTENT = #{content,jdbcType=LONGVARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.vo.Article">
@@ -318,6 +260,7 @@
     set TITLE = #{title,jdbcType=VARCHAR},
       `TYPE` = #{type,jdbcType=VARCHAR},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=VARCHAR},
       SIMPLE_INTRODUCTION = #{simpleIntroduction,jdbcType=VARCHAR},
       VISIT_COUNT = #{visitCount,jdbcType=INTEGER},
       SHRINK_IMG_URL = #{shrinkImgUrl,jdbcType=VARCHAR}

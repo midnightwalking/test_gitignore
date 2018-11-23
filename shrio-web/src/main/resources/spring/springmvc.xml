@@ -8,6 +8,8 @@
 
     <context:component-scan base-package="com.qiuzhi.controller"></context:component-scan>
 
+    <mvc:default-servlet-handler />
+
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
