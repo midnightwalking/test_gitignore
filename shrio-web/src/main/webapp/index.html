@@ -128,6 +128,8 @@
             font-size: 16px;
             color: #333;
             font-weight: 600;
+            text-decoration:none;
+            cursor: pointer;
         }
         .article_tag span{
             display: inline-block;
@@ -296,12 +298,13 @@
                        var articleHtml = "";
                        articleHtml += articleBaseHtml;
                        var articleObject = articles[i];
+                       var articleID = articleObject.id;
                        var articleTitle = articleObject.title;
                        var articleCreateTime = articleObject.createTime;
                        var articleSimpleIntroduction = articleObject.simpleIntroduction;
                        var articleShrinkImgUrl = articleObject.shrinkImgUrl;
                        articleHtml += "<div class='media-body'>";
-                       articleHtml += "<h4 class='article_title'>"+articleTitle+"</h4>";// 标题
+                       articleHtml += "<a class='article_title' href='/shrio-web/html/blog/content.html?contentID=" + articleID + "'>"+articleTitle+"</a>";// 标题
                        articleHtml += "<p class='article_tag'><span>Test</span><span>QZ</span></p>";
                        articleHtml += "<div class='article_simpleIntro'>";
                        articleHtml += articleSimpleIntroduction;
@@ -317,6 +320,7 @@
                        articleListHtml += articleHtml;
                    }
                    $("#articlesDiv").html(articleListHtml);
+
                    // console.log(articleListHtml);
                }else{
                    alert("加载失败");
