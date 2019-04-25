@@ -69,6 +69,7 @@
 
     <bean class="com.qiuzhi.manager.CusSessionManager" id="sessionManager">
         <property name="sessionDAO" ref="redisSessionDao"></property>
+        <property name="sessionIdCookie" ref="cookies"/><!--新增-->
     </bean>
 
     <bean class="com.qiuzhi.session.RedisSessionDao" id="redisSessionDao"></bean>
@@ -77,7 +78,15 @@
 
     <bean class="org.apache.shiro.web.mgt.CookieRememberMeManager" id="cookieRememberMeManager"></bean>
     <bean class="org.apache.shiro.web.servlet.SimpleCookie" id="cookies">
-        <constructor-arg value="rememberme"></constructor-arg>
+        <!--<constructor-arg value="rememberme"></constructor-arg>-->
+        <!--新增-->
+        <constructor-arg name="name" value="shiro.sesssion"/>
+        <property name="path" value="/"/>
         <property name="maxAge" value="2000000"></property>
     </bean>
+
+    <!--初始化排行榜-->
+    <bean class="com.qiuzhi.services.InitHotServices" init-method="initHotArticle">
+    </bean>
+
 </beans>
