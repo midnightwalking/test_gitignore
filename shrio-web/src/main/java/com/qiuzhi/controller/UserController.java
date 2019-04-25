@@ -1,6 +1,5 @@
 package com.qiuzhi.controller;
 
-import com.vo.ReturnObject;
 import com.vo.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,21 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-/**
- * UserController class
- *
- * @author qiuzhi
- * @date 2018/11/15
- */
-
 @Controller
 public class UserController {
+
     private final static Log logger = LogFactory.getLog(UserController.class);
 
     @RequestMapping(value = "subLogin", method = RequestMethod.POST,
     produces = "application/json;charset=utf-8")
     @ResponseBody
-    public ReturnObject subLogin(User user){
+    public String subLogin(User user){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
         logger.info("用户：" + user.getUsername() + "尝试登录！");
@@ -38,18 +31,18 @@ public class UserController {
             subject.login(token);
         }catch (Exception e){
             if(e instanceof UnknownAccountException){
-
-                return new ReturnObject("1","登录失败:用户名不存在");
+                return "用户名不存在";
             }else if(e instanceof IncorrectCredentialsException){
-                return new ReturnObject("1","登录失败:密码错误");
+                return "密码错误";
             }
-            return new ReturnObject("1",e.getMessage());
+
+            return e.getMessage();
         }
 
-//        if(subject.hasRole("admin")){
-//            return "有admin权限";
-//        }
-        return new ReturnObject("0","操作成功");
+        if(subject.hasRole("admin")){
+            return "有admin权限";
+        }
+        return "无admin权限";
     }
 
 //    @RequiresRoles("admin")
@@ -85,5 +78,15 @@ public class UserController {
     }
 
 
+    @RequestMapping(value = "/testPerms2", method = RequestMethod.GET)
+    @ResponseBody
+    public String testPerms2(){
+        return "testPerms1 success22";
+    }
 
+    @RequestMapping(value = "/testPerms3", method = RequestMethod.GET)
+    @ResponseBody
+    public String testPerms3(){
+        return "testPerms1 success33";
+    }
 }
