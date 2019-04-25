@@ -199,6 +199,28 @@
             margin-right: 10px;
             margin-bottom: 10px;
         }
+        .hot-articles{
+            margin-top:20px;
+        }
+        .hot-articles-content{
+            padding-top:5px;
+            background-color: #fff;
+        }
+        .hot-articles-content div{
+            padding: 2px;
+        }
+        .hot-articles-content div p{
+            text-indent: 5px;
+        }
+        .hotTitle{
+            margin-left: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            color: black;
+        }
+        .goContent{
+
+        }
     </style>
 </head>
 <body>
@@ -222,7 +244,7 @@
                         <span class="topSpan">置顶</span>
                         <div class="top-content">
                             <h3>Welcome to QZ-ZONE</h3>
-                            <p>欢迎各位来到QZ-ZONE，该网站用于分享个人的经验以及优秀的资源，希望大家看的开心!</p>
+                            <p>欢迎各位来到QZ-ZONE</p>
                         </div>
                     </div>
                 </div>
@@ -232,7 +254,6 @@
                         <p>最近发布</p>
                     </div>
                     <div class="articles" id="articlesDiv">
-
                     </div>
                 </div>
             </div>
@@ -264,7 +285,11 @@
                 </div>
 
                 <div class="hot-articles">
-
+                    <div class="hot-tag-head">
+                        <p>热门文章</p>
+                    </div>
+                    <div class="hot-articles-content">
+                    </div>
                 </div>
             </div>
         </div>
@@ -304,7 +329,7 @@
                        var articleSimpleIntroduction = articleObject.simpleIntroduction;
                        var articleShrinkImgUrl = articleObject.shrinkImgUrl;
                        articleHtml += "<div class='media-body'>";
-                       articleHtml += "<a class='article_title' href='/shrio-web/html/blog/content.html?contentID=" + articleID + "'>"+articleTitle+"</a>";// 标题
+                       articleHtml += "<a class='article_title goContent' id='"+articleID+"@"+articleTitle+"' href='/shrio-web/html/blog/content.html?contentID=" + articleID + "&articleTitle="+articleTitle+"'>"+articleTitle+"</a>";// 标题
                        articleHtml += "<p class='article_tag'><span>Test</span><span>QZ</span></p>";
                        articleHtml += "<div class='article_simpleIntro'>";
                        articleHtml += articleSimpleIntroduction;
@@ -316,12 +341,44 @@
                            articleHtml += "</div>";
                        }
                        articleHtml += "</div></div></div>";
-
                        articleListHtml += articleHtml;
                    }
                    $("#articlesDiv").html(articleListHtml);
+                   // 加载完文章后加载热门文章
+                   $.ajax({
+                       type: "GET",
+                       url: "/shrio-web/hotArticle",
+                       async: true,
+                       dataType: "json",
+                       success: function (result) {
+                           if(result.retCode == 0){
+                               var articles = result.returnVal;
+                               var hotArticleHtml = "";
+                               for(var i = 0; i < articles.length; i++){
+                                   var articleObject = articles[i];
+                                   var a_id = articleObject.split("@")[0];
+                                   var a_title = articleObject.split("@")[1];
+                                   hotArticleHtml += "<div>";
+                                   hotArticleHtml += "<p><span>"+(i+1)+".  </span><a class='hotTitle goContent' id='"+a_id+"@"+a_title+"' href='/shrio-web/html/blog/content.html?contentID=" + a_id + "&articleTitle="+a_title+"'>"+ a_title +"</a></p>";
+                                   hotArticleHtml += "</div>";
+                               }
+                               $(".hot-articles-content").html(hotArticleHtml);
+                               $(".goContent").on('click',function(){
+                                   addArticleCount($(this).attr("id"));
+                               });
+                           }else{
+                               alert("加载热门失败");
+                           }
+                       },
+                       error: function (data) {
+                           $(".goContent").on('click',function(){
+                               addArticleCount($(this).attr("id"));
+                           });
+                           alert("加载热门失败");
+                       }
+                   });
 
-                   // console.log(articleListHtml);
+
                }else{
                    alert("加载失败");
                }
@@ -330,7 +387,26 @@
                 alert("获取文章失败");
             }
         });
-    })
 
+        function addArticleCount(contentIdTitle) {
+            $.ajax({
+                type: "GET",
+                url: "/shrio-web/hotArticle/" + contentIdTitle,
+                async: true,
+                dataType: "json",
+                success: function (result) {
+                    if (result.retCode == '0') {
+                        console.info("增加点击次数成功");
+                    } else {
+                        console.info("增加点击次数失败");
+                    }
+                },
+                error: function (data) {
+                    alert("获取文章失败");
+                }
+            });
+        }
+
+    })
 </script>
 </html>

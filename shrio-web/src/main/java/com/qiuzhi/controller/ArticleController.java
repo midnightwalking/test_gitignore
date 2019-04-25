@@ -2,10 +2,9 @@ package com.qiuzhi.controller;
 
 import com.qiuzhi.dao.mapper.ArticleMapper;
 import com.qiuzhi.utils.IDUtil;
-import com.vo.Article;
-import com.vo.ArticleExample;
-import com.vo.ArticleQuery;
-import com.vo.ReturnObject;
+import com.qiuzhi.utils.JedisUtil;
+import com.vo.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -24,6 +23,9 @@ public class ArticleController {
 
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    private JedisUtil jedisUtil;
     /**
      *@描述 新增文章
      *@参数 
@@ -35,10 +37,15 @@ public class ArticleController {
     @RequestMapping(value = "/article" , method = RequestMethod.POST)
     @ResponseBody
     public ReturnObject addArticle(Article article){
-        LOG.info("传入的文章内容为：" + article.getContent());
+        LOG.info("新增文章Begin");
+//        BeanUtils.copyProperties(article,article);
         article.setId(IDUtil.getUUID32());
         article.setCreateTime(new Date());
         articleMapper.insert(article);
+        List<Article> articles = new ArrayList<>();
+        articles.add(article);
+        jedisUtil.zSetArticles(articles);
+        LOG.info("新增文章End");
         return new ReturnObject("0","操作成功");
     }
 
@@ -129,5 +136,34 @@ public class ArticleController {
         return map;
     }
 
+    /**
+     * @Author qiuzhi
+     * @Description 获取热门文章
+     * @Date 15:54 2019/1/29
+     * @Param []
+     * @return com.vo.ReturnObject
+     **/
 
+    @RequestMapping(value = "/hotArticle", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnObject getHotArticle(){
+        Set<String> articles = jedisUtil.getHotArticle();
+        return new ReturnObject("0","操作成功",articles);
+    }
+
+    /**
+     * @Author qiuzhi
+     * @Description 文章点击新增点击量
+     * @Date 11:12 2019/1/30
+     * @Param [idTitle]
+     * @return com.vo.ReturnObject
+     **/
+
+    @RequestMapping(value = "/hotArticle/{idTitle}", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnObject addZset(@PathVariable String idTitle){
+        System.out.println(idTitle);
+        jedisUtil.addScoreByKey(idTitle);
+        return new ReturnObject("0","操作成功","");
+    }
 }

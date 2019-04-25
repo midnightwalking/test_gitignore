@@ -1,6 +1,7 @@
 package com.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Date;
  * article
  * @author 
  */
+@Builder
 public class Article implements Serializable {
     /**
      * 主键
@@ -50,6 +52,10 @@ public class Article implements Serializable {
      * 本地存放的URL地址
      */
     private String shrinkImgUrl;
+
+    // 是否同步redis标识
+    private String is_zset;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -117,6 +123,14 @@ public class Article implements Serializable {
 
     public void setShrinkImgUrl(String shrinkImgUrl) {
         this.shrinkImgUrl = shrinkImgUrl;
+    }
+
+    public String getIs_zset() {
+        return is_zset;
+    }
+
+    public void setIs_zset(String is_zset) {
+        this.is_zset = is_zset;
     }
 
     @Override
