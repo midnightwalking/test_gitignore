@@ -130,31 +130,12 @@
         .content-Detail{
             height: 100%;
             padding: 15px;
-            background-color:white;
         }
         .contentDiv{
             padding: 30px;
         }
         .contentDiv img{
             width:100%;
-        }
-        .content-reply{
-            margin-top: 20px;
-            height: 100%;
-            border: 1px solid #d8d3d3;
-            background-color: #f5f5f5;
-        }
-        .content-reply h3{
-            text-align: center;
-        }
-        .replyContent{
-            width: 100%;
-            margin-top: 10px;
-            height:200px;
-        }
-        .replyButton{
-            width: 100%;
-            margin-top: 10px;
         }
     </style>
 </head>
@@ -165,7 +146,7 @@
         <div class="head">
             <p class="navP">QZ-ZONE</p>
             <ul class="navMenu">
-                <li><a style="color:white;" href="/shrio-web/index.html">主页</a></li>
+                <li><a style="color:white;" href="#">主页</a></li>
                 <li><a href="#">关于</a></li>
                 <li><a href="#">18R</a></li>
             </ul>
@@ -183,11 +164,6 @@
                     <!-- 内容正文 -->
                     <div class="content-Detail" id="content-Detail-Div">
                     </div>
-                </div>
-                <div class="content-reply" id="content-reply">
-                    <h3 id="noReply" style="display:none;">还没有评论~快来抢占沙发吧！</h3>
-                    <textarea id="replyContent" class="replyContent" placeholder="在这里输入你的回复"></textarea>
-                    <button type="button" class="btn replyButton" id="replyButton">点击回复</button>
                 </div>
             </div>
             <div class="main-right">
@@ -251,54 +227,6 @@
             error: function (data) {
                 alert("获取文章失败");
             }
-        });
-
-        $.ajax({
-            type: "GET",
-            url: "/shrio-web/reply/getArticleReply/" + contentId,
-            async: true,
-            dataType: "json",
-            success: function (result) {
-                if (result.retCode == '0') {
-                    var replies = result.returnVal;
-                    if(replies.length == 0){
-                        $("#noReply").css("display","block");
-                    }
-                } else {
-                    alert("获取评论失败" + result.retMsg);
-                }
-            },
-            error: function (data) {
-                alert("获取评论");
-            }
-        });
-
-        $("#replyButton").on('click',function(){
-            var replyArticleId = contentId;
-            alert(JSON.stringify({
-                "replyContent": $("#replyContent").val(),
-                "relativeArticleid": replyArticleId
-            }));
-            $.ajax({
-                type: "POST",
-                url: "/shrio-web/reply/replyArticle",
-                data:JSON.stringify({
-                    "replyContent": $("#replyContent").val(),
-                    "relativeArticleid": replyArticleId
-                }),
-                async: true,
-                dataType: "json",
-                success: function (result) {
-                    if (result.retCode == '0') {
-                       alert("评论成功");
-                    } else {
-                        alert("评论失败" + result.retMsg);
-                    }
-                },
-                error: function (data) {
-                    alert("评论失败");
-                }
-            });
         });
     });
 

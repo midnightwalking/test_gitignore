@@ -10,7 +10,6 @@
     <result column="SIMPLE_INTRODUCTION" jdbcType="VARCHAR" property="simpleIntroduction" />
     <result column="VISIT_COUNT" jdbcType="INTEGER" property="visitCount" />
     <result column="SHRINK_IMG_URL" jdbcType="VARCHAR" property="shrinkImgUrl" />
-    <result column="IS_ZSET" jdbcType="VARCHAR" property="is_zset" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -264,12 +263,7 @@
       CONTENT = #{content,jdbcType=VARCHAR},
       SIMPLE_INTRODUCTION = #{simpleIntroduction,jdbcType=VARCHAR},
       VISIT_COUNT = #{visitCount,jdbcType=INTEGER},
-      SHRINK_IMG_URL = #{shrinkImgUrl,jdbcType=VARCHAR},
-      IS_ZSET = #{is_zset,jdbcType=VARCHAR}
+      SHRINK_IMG_URL = #{shrinkImgUrl,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
-
-  <select id="getNotZsetList" resultMap="BaseResultMap">
-    select * from article where IS_ZSET='0'
-  </select>
 </mapper>
