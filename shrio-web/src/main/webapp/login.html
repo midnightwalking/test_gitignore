@@ -92,13 +92,9 @@
                         password: $("#password").val()
                     },
                     async: true,
-                    dataType: "json",
+                    dataType: "text",
                     success: function(result) {
-                       if(result.retCode == '0'){
-                           window.location.href = "/shrio-web/html/manager/article.html";
-                       }else{
-                           alert(result.retMsg);
-                       }
+                        alert(result);
                     }
                 });
             });
