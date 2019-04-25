@@ -83,4 +83,10 @@ public class UserController {
     public String testPerms2(){
         return "testPerms1 success22";
     }
+
+    @RequestMapping(value = "/testPerms3", method = RequestMethod.GET)
+    @ResponseBody
+    public String testPerms3(){
+        return "testPerms1 success33";
+    }
 }
